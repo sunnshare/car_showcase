@@ -1,11 +1,10 @@
-"use client"
-
+"use client";
 import { SearchManufacturer } from "."
 import { useState } from "react"
-
+import { useRouter } from "next/navigation";
 import Image from "next/image"
 
-import { SearchBarProps } from "@/types"
+import { updateSearchParams } from "@/utils";
 
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => {
   return (
@@ -15,17 +14,17 @@ const SearchButton = ({ otherClasses }: { otherClasses: string }) => {
   )
 }
 
-const SearchBar = ({ setManuFacturer, setModel }: SearchBarProps) => {
+const SearchBar = () => {
   const [searchManufacturer, setSearchManufacturer] = useState("")
   const [searchModel, setSearchModel] = useState("")
-
+  const router = useRouter();
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchManufacturer.trim() === '' && searchModel.trim() === "") {
       return alert("please fill in the search bar")
     }
-    setModel(searchModel)
-    setManuFacturer(searchManufacturer)
+    const newPathname = updateSearchParams(searchModel.toLowerCase(), searchManufacturer.toLowerCase());
+    router.push(newPathname);
   }
 
   return (
